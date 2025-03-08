@@ -7,6 +7,7 @@ const ExpenseForm = (props) => {
   const [enteredAmount, setEnteredAmount] = useState("");
 
   const [enteredDate, setEnteredDate] = useState("");
+  const [isEditing, setIsEditing] = useState(false); // State for conditional rendering
 
   const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
@@ -30,12 +31,21 @@ const ExpenseForm = (props) => {
     setEnteredAmount('');
     setEnteredDate('');
     props.onSaveExpenseData(expenseData);
+     setIsEditing(false); 
 
 
   }
+  const handleCancel = () => {
+    setIsEditing(false); // Hide form when "Cancel" is clicked
+  };
+  
 
   return (
-    <form onSubmit={submitFormHandler}>
+   <div>
+   {!isEditing && ( // Show "Add Expense" button if not editing
+        <button onClick={() => setIsEditing(true)}>Add Expense</button>
+      )}
+    {isEditing&&( <form onSubmit={submitFormHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label htmlFor="title">Title</label>
@@ -51,9 +61,11 @@ const ExpenseForm = (props) => {
         </div>
       </div>
       <div className="new-expense__actions">
+      <button type="button" onClick={handleCancel}>Cancel</button>
         <button type="submit">Add Expense</button>
       </div>
-    </form>
+    </form>)}
+   </div>
   );
 };
 
